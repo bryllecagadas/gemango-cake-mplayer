@@ -1,7 +1,7 @@
 <?php
 $config = array(
 	'MPlayer' => array(
-		"input_pipe"  => "/home/brylle/controls",
+		"input_pipe"  => "/etc/mplayer/controls",
 		"music_directory" => "/home/brylle/Music",
 	)
 );
