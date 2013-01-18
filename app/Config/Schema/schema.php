@@ -8,7 +8,7 @@ class AppSchema extends CakeSchema {
 	public function after($event = array()) {
 	}
 
-	public $queue = array(
+	public $queues = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
 		'song_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index'),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
