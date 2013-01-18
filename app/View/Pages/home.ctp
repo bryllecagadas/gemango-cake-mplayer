@@ -47,11 +47,11 @@ Photon.exec.homepage = {
 		$.ajax({
 			url: Photon.base + "players/files/" + search,
 			success: function(response) {
-				var values = eval(response);
+				var values = eval("(" + response + ")");
 				if($("#songs-list").length) {
 					$("#songs-list").empty();
-					for(var i = 0; i < values.length; i++) {
-						$("#songs-list").append(me.createElem(values[i], search));
+					for(var i = 0; i < values.data.length; i++) {
+						$("#songs-list").append(me.createElem(values.data[i], search));
 					}
 				}
 			}

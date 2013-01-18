@@ -6,6 +6,10 @@ if(typeof Photon.exec === "undefined") {
 	Photon.exec = {};
 }
 
+if(typeof Photon.settings === "undefined") {
+	Photon.settings = {};
+}
+
 jQuery(document).ready(function() {
 	Photon.init = function() {
 		var me = this;

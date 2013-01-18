@@ -10,6 +10,7 @@
 		echo $this->Html->css('cake.generic');
 		echo $this->Html->script('jquery.min');
 		echo $this->Html->script('photon-beam');
+		echo $this->Html->script('photon-beam-player');
 		$this->Html->scriptBlock("Photon.base = '" . Router::url("/") ."';", array("inline" => false));
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -26,6 +27,7 @@
 			<ul class="actions controls">
 				<li><a href="<?php echo Router::url("/pause"); ?>">Play/Pause</a></li>
 				<li><a href="<?php echo Router::url("/stop"); ?>">Stop</a></li>
+				<li><span class="player-time"></span></li>
 			</ul>
 			<?php echo $this->fetch('content'); ?>
 		</div>
