@@ -2,6 +2,8 @@
 
 define("SONG_LENGTH", "ANS_LENGTH");
 define("SONG_POSITION", "ANS_TIME_POSITION");
+define("SONG_ARTIST", "ANS_META_ARTIST");
+define("SONG_TITLE", "ANS_META_TITLE");
 
 App::uses('AppController', 'Controller');
 App::uses('Folder', 'Utility');
@@ -84,35 +86,55 @@ class PlayersController extends AppController {
 	}
 	
 	public function song_info() {
+		$start = microtime();
+		
+		if(!($position = $this->get_song_info(SONG_POSITION, "get_time_pos"))) {
+			return $this->Json->response("error");
+		}
+		
+		if(!($length = $this->get_song_info(SONG_LENGTH, "get_time_length"))) {
+			return $this->Json->response("error");
+		}
+		
+		if(!($artist = $this->get_song_info(SONG_ARTIST, "get_meta_artist"))) {
+			return $this->Json->response("error");
+		}
+		
+		if(!($title = $this->get_song_info(SONG_TITLE, "get_meta_title"))) {
+			return $this->Json->response("error");
+		}
+		
+		$diff = microtime() - $start;
+		
+		if($diff < 500000) {
+			usleep(500000 - $diff);
+		}
+		
+		$details = array(
+			"length" => $length, 
+			"position" => $position,
+			"artist" => trim($artist,"'\""),
+			"title" => trim($title,"'\""),
+		);
+		
+		echo $this->Json->response("success", "", $details);
+	}
+	
+	private function get_song_info($type, $command) {
 		$input 	= Configure::read("MPlayer.input_pipe");
 		$output = Configure::read("MPlayer.output_pipe");
-		
 		$values = array();
-		exec("echo \"get_time_length\" > '$input'");
-		usleep(500000);
+		
+		exec("echo \"$command\" > '$input'");
+		usleep(100000);
 		exec("tail -n 1 $output", $values);
 		if(isset($values[0])) {
 			parse_str($values[0], $response);
-			if(!isset($response[SONG_LENGTH])) {
-				echo $this->Json->response("error");
-				return;
+			if(!isset($response[$type])) {
+				return false;
 			}
-			$length = $response[SONG_LENGTH];
+			return $response[$type];
 		}
-		
-		$values = array();
-		exec("echo \"get_time_pos\" > '$input'");
-		usleep(500000);
-		exec("tail -n 1 $output", $values);
-		if(isset($values[0])) {
-			parse_str($values[0], $response);
-			if(!isset($response[SONG_POSITION])) {
-				echo $this->Json->response("error");
-				return;
-			}
-			$position = $response[SONG_POSITION];
-		}
-		
-		echo $this->Json->response("success", "", array("length" => $length, "position" => $position));
+		return false; 
 	}
 }

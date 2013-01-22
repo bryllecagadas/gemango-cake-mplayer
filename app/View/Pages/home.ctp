@@ -35,7 +35,12 @@ Photon.exec.homepage = {
 			e.preventDefault();
 			var button = this;
 			$.ajax({
-				url: button.href
+				url: button.href,
+				success: function(response) {
+					if(!Photon.exec.player.isPlaying) {
+						Photon.exec.player.getTrackInfo();
+					}
+				}
 			});
 			return false;
 		});
@@ -67,11 +72,11 @@ Photon.exec.homepage = {
 			}
 		}
 		
-		return '<div class="song-item"><span><a href="$file_base_path' + 
+		return '<div class="song-item"><a href="$file_base_path' + 
 				value.Song.id + 
-				'" class="song-action">Add to queue</a></span>' + 
+				'" class="song-action" title="Add to queue">' + 
 				value.Song.artist + ' - ' + value.Song.title +
-				' [' + value.Song.filename + ']' + '</div>';
+				' [' + value.Song.filename + ']' + '</a></div>';
 	}
 }
 JS;

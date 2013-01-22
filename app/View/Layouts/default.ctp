@@ -24,14 +24,16 @@
 		</div>
 		<div id="content">
 			<?php echo $this->Session->flash(); ?>
-			<ul class="actions controls">
-				<li><a href="<?php echo Router::url("/pause"); ?>">Play/Pause</a></li>
-				<li><a href="<?php echo Router::url("/stop"); ?>">Stop</a></li>
-				<li><span class="player-time"></span></li>
+			<ul class="controls">
+				<li><a href="<?php echo Router::url("/pause"); ?>" title="Play/pause" class="player-pause">Play/Pause</a></li>
+				<li><a href="<?php echo Router::url("/stop"); ?>" title="Stop" class="player-stop">Stop</a></li>
+				<li><div id="song-info"></div><div class="player-time"></div></li>
 			</ul>
 			<?php echo $this->fetch('content'); ?>
+			<img src="<?php echo Router::url("/img/gemango-logo.png"); ?>" />
 		</div>
 		<div id="footer">
+			Icons designed by <a href="http://thenounproject.com/chapmanjw" target="_blank">John Chapman</a> from The Noun Project<br />
 		</div>
 	</div>
 </body>
