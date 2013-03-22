@@ -11,22 +11,13 @@ if(typeof Photon.settings === "undefined") {
 }
 
 jQuery(document).ready(function() {
-	Photon.init = function() {
+	Photon.init = function(settings) {
 		var me = this;
 		for(var i in me.exec) {
 			if(typeof Photon.exec[i].init !== "undefined") {
-				Photon.exec[i].init();
+				Photon.exec[i].init(settings);
 			}
 		}
-		
-		$(".controls a").live("click", function(e) {
-			e.preventDefault();
-			var button = this;
-			$.ajax({
-				url: button.href
-			});
-			return false;
-		});
 	};
-	Photon.init();
+	Photon.init(Photon.settings);
 });

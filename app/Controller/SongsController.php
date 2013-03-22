@@ -9,7 +9,10 @@ class SongsController extends AppController {
 	
 	public function scan() {
 		$this->SongList = $this->Components->load('SongList');
+		$this->Json = $this->Components->load('Json');
 		App::uses('Folder', 'Utility');
+		$this->layout = "ajax";
+		$this->autoRender = false;
 		
 		$files = $this->SongList->files();
 		foreach($files as $file) {
@@ -30,6 +33,6 @@ class SongsController extends AppController {
 			}
 		}
 		
-		$this->redirect("/");
+		echo $this->Json->response("success");
 	}
 }

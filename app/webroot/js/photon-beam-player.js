@@ -17,15 +17,17 @@ Photon.exec.player = {
 				var isPlaying = false;
 				$(".player-time").empty();
 				if(
+					typeof results.status !== "undefined" &&
 					results.status != "error" && 
 					typeof results.data.length !== "undefined" && 
 					typeof results.data.position !== "undefined" &&
 					typeof results.data.artist !== "undefined" &&
-					typeof results.data.title !== "undefined"
+					typeof results.data.title !== "undefined" &&
+					typeof results.data.diff !== "undefined"
 				) {
 					isPlaying = true;
 					me.songLength = results.data.length;
-					me.songPos = parseFloat(results.data.position) + 1.5;
+					me.songPos = parseFloat(results.data.position) + results.data.diff;
 					$(".player-time").hide().html(me.formatTime(me.songPos)).fadeIn('fast');;
 					me.updateTimer();
 					me.updateSongInfoBox(results.data);
@@ -39,12 +41,15 @@ Photon.exec.player = {
 	},
 	updateTimer : function() {
 		var me = this;
+		var timeout;
 		me.timer = setInterval(function() {
 			me.songPos = parseFloat(me.songPos) + 1;
-			if(parseFloat(me.songPos) >= me.songLength) {
+			if(parseFloat(me.songPos) > (parseFloat(me.songLength) + 1)) {
 				me.clearSongInfo();
 				clearInterval(me.timer);
-				me.getTrackInfo();
+				timeout = setTimeout(function() {
+					me.getTrackInfo();
+				}, 2000);
 			} else {
 				$(".player-time").html(me.formatTime(me.songPos));
 			}
@@ -62,9 +67,17 @@ Photon.exec.player = {
 	attachPlayerButtonHandlers : function() {
 		var me = this;
 		$(".controls a").live("click", function() {
-			clearInterval(me.timer);
-			me.isPlaying = false;
-			me.clearSongInfo();
+			e.preventDefault();
+			var button = this;
+			$.ajax({
+				url: button.href
+			});
+			
+			if(me.isPlaying) {
+				clearInterval(me.timer);
+				me.clearSongInfo();
+			}
+			return false;
 		});
 	},
 	clearSongInfo : function() {

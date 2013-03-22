@@ -36,8 +36,4 @@ class AppController extends Controller {
 		parent::beforeFilter();
 		Configure::load('mplayer', 'default');
 	}
-	public function beforeRender() {
-		$base_path = Router::url(array("controller" => "players", "action" => "enqueue", "file" => ""));
-		$this->set("file_base_path", $base_path);
-	}
 }

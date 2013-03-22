@@ -86,7 +86,7 @@ class PlayersController extends AppController {
 	}
 	
 	public function song_info() {
-		$start = microtime();
+		$start = microtime(true);
 		
 		if(!($position = $this->get_song_info(SONG_POSITION, "get_time_pos"))) {
 			return $this->Json->response("error");
@@ -104,17 +104,14 @@ class PlayersController extends AppController {
 			return $this->Json->response("error");
 		}
 		
-		$diff = microtime() - $start;
-		
-		if($diff < 500000) {
-			usleep(500000 - $diff);
-		}
+		$diff = microtime(true) - $start;
 		
 		$details = array(
 			"length" => $length, 
 			"position" => $position,
 			"artist" => trim($artist,"'\""),
 			"title" => trim($title,"'\""),
+			"diff" => $diff,
 		);
 		
 		echo $this->Json->response("success", "", $details);
@@ -126,7 +123,7 @@ class PlayersController extends AppController {
 		$values = array();
 		
 		exec("echo \"$command\" > '$input'");
-		usleep(100000);
+		usleep(200000);
 		exec("tail -n 1 $output", $values);
 		if(isset($values[0])) {
 			parse_str($values[0], $response);
